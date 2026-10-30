@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste dos Temperamentos | RH Master Estratégia</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f2f5fc;font-family:Arial,sans-serif;color:#18233c}
+header{background:#1746a2;color:white;text-align:center;padding:28px 15px}
+header h1{margin:0;font-size:25px}
+header p{margin:8px 0 0}
+main{max-width:760px;margin:30px auto;padding:25px;background:white;border-radius:16px;box-shadow:0 5px 25px #142b5015}
+h2{color:#1746a2}
+button{background:#1746a2;color:white;border:0;padding:14px 22px;border-radius:8px;font-size:16px;cursor:pointer}
+button:hover{background:#103578}
+.question{padding:16px 0;border-bottom:1px solid #e5eaf3}
+label.option{display:block;padding:10px;margin:7px 0;background:#f3f6fc;border-radius:8px;cursor:pointer}
+input[type=radio]{margin-right:9px}
+input[type=text],input[type=email]{width:100%;padding:13px;border:1px solid #cbd5e5;border-radius:8px;margin:7px 0 15px}
+.hidden{display:none}
+.result{background:#edf3ff;padding:20px;border-radius:12px;margin-top:20px}
+footer{text-align:center;color:#64748b;padding:20px;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+<h1>RH MASTER ESTRATÉGIA</h1>
+<p>Descubra seu perfil comportamental</p>
+</header>
+<main>
+<section id="intro">
+<h2>Teste dos Quatro Temperamentos</h2>
+<p>Responda às perguntas e descubra qual dos quatro perfis clássicos mais se aproxima das suas tendências comportamentais.</p>
+<p><strong>Tempo estimado:</strong> 3 a 5 minutos.</p>
+<p><small>Este é um exercício educativo de autoconhecimento, não um teste psicológico validado nem instrumento de seleção profissional.</small></p>
+<button onclick="startTest()">Começar teste gratuito</button>
+</section>
+<section id="quiz" class="hidden">
+<h2>Responda com sinceridade</h2>
+<p>Escolha uma alternativa em cada pergunta.</p>
+<form id="testForm">
+<div id="questions"></div>
+<button type="submit">Ver meu resultado</button>
+</form>
+</section>
+<section id="result" class="hidden">
+<h2>Seu resultado</h2>
+<div class="result">
+<h2 id="profile"></h2>
+<p id="description"></p>
+<p><strong>Pontos fortes:</strong> <span id="strengths"></span></p>
+<p><strong>Pontos de atenção:</strong> <span id="challenges"></span></p>
+<p><strong>Dica de desenvolvimento:</strong> <span id="advice"></span></p>
+</div>
+<h3>Receba seu resultado por e-mail</h3>
+<form id="emailForm">
+<label for="personName">Seu nome</label>
+<input id="personName" type="text" required placeholder="Digite seu nome">
+<label for="personEmail">Seu e-mail</label>
+<input id="personEmail" type="email" required placeholder="Digite seu e-mail">
+<label><input type="checkbox" required> Autorizo o uso dos meus dados para receber este resultado por e-mail. Consulte a política de privacidade.</label>
+<p><small>O envio automático será ativado na próxima etapa, após configurarmos o serviço de e-mail.</small></p>
+<button type="submit">Preparar meu resultado</button>
+</form>
+<p id="emailMessage"></p>
+</section>
+</main>
+<footer>RH Master Estratégia | Autoconhecimento e desenvolvimento humano</footer>
+<script>
+const profiles={
+S:{name:"Sanguíneo",description:"Perfil associado à sociabilidade, entusiasmo e facilidade para criar conexões.",strengths:"Comunicação, entusiasmo, espontaneidade e energia social.",challenges:"Pode precisar desenvolver foco, organização e constância.",advice:"Defina prioridades e transforme ideias em pequenas ações planejadas.",emoji:"😊"},
+C:{name:"Colérico",description:"Perfil associado à iniciativa, assertividade e orientação para objetivos.",strengths:"Decisão, iniciativa, objetividade e capacidade de mobilização.",challenges:"Pode precisar exercitar paciência, escuta e flexibilidade.",advice:"Pratique ouvir diferentes perspectivas antes de tomar decisões.",emoji:"🚀"},
+M:{name:"Melancólico",description:"Perfil associado à reflexão, atenção aos detalhes e busca por qualidade.",strengths:"Análise, planejamento, profundidade e cuidado com a qualidade.",challenges:"Pode precisar lidar com excesso de cobrança e perfeccionismo.",advice:"Estabeleça critérios realistas e reconheça o progresso, não apenas o resultado final.",emoji:"🔎"},
+F:{name:"Fleumático",description:"Perfil associado à tranquilidade, estabilidade e cooperação.",strengths:"Escuta, equilíbrio, paciência e colaboração.",challenges:"Pode precisar desenvolver assertividade e iniciativa em situações de mudança.",advice:"Expresse suas opiniões com clareza e estabeleça prazos para suas decisões.",emoji:"🌿"}
+};
+const questions=[
+["Em um grupo novo, você costuma:",["Conversar e fazer amizades rapidamente","Assumir a iniciativa e organizar","Observar antes de participar","Ouvir e integrar as pessoas"],["S","C","M","F"]],
+["Diante de um desafio, você prefere:",["Buscar ideias e conversar","Agir rapidamente para resolver","Analisar os detalhes","Manter a calma e avaliar alternativas"],["S","C","M","F"]],
+["As pessoas costumam reconhecer em você:",["Entusiasmo","Determinação","Atenção aos detalhes","Paciência"],["S","C","M","F"]],
+["Em uma equipe, você tende a:",["Motivar e comunicar","Liderar e direcionar","Planejar e revisar","Apoiar e conciliar"],["S","C","M","F"]],
+["Quando algo muda de repente:",["Procuro enxergar o lado positivo","Adapto o plano e sigo em frente","Quero entender todos os detalhes","Preciso de um tempo para me adaptar"],["S","C","M","F"]],
+["Sua comunicação tende a ser:",["Expressiva e espontânea","Direta e objetiva","Cuidadosa e detalhada","Calma e ponderada"],["S","C","M","F"]],
+["Ao tomar decisões, você valoriza:",["O entusiasmo e as possibilidades","A rapidez e os resultados","As informações e a precisão","A harmonia e a segurança"],["S","C","M","F"]],
+["Em situações de conflito, você tende a:",["Tentar aliviar o clima","Enfrentar o problema diretamente","Analisar as causas","Buscar um acordo tranquilo"],["S","C","M","F"]],
+["Seu ambiente de trabalho ideal é:",["Dinâmico e cheio de interação","Desafiador e orientado a metas","Organizado e bem estruturado","Cooperativo e estável"],["S","C","M","F"]],
+["Quando recebe uma tarefa:",["Gosto de começar com entusiasmo","Vou direto ao objetivo","Planejo cada etapa","Prefiro avançar com tranquilidade"],["S","C","M","F"]],
+["O que mais pode incomodar você?",["Rotina e isolamento","Lentidão e indecisão","Desorganização e erros","Conflitos e pressão excessiva"],["S","C","M","F"]],
+["Em relação ao futuro, você costuma:",["Imaginar possibilidades","Definir metas ambiciosas","Planejar cuidadosamente","Buscar estabilidade e equilíbrio"],["S","C","M","F"]]
+];
+let scores={S:0,C:0,M:0,F:0},finalProfile=null;
+function startTest(){document.getElementById("intro").classList.add("hidden");document.getElementById("quiz").classList.remove("hidden");}
+function renderQuestions(){
+document.getElementById("questions").innerHTML=questions.map((q,i)=>'<div class="question"><strong>'+(i+1)+'. '+q[0]+'</strong>'+q[1].map((a,j)=>'<label class="option"><input type="radio" name="q'+i+'" value="'+q[2][j]+'" required>'+a+'</label>').join("")+'</div>').join("");
+}
+document.getElementById("testForm").addEventListener("submit",function(e){
+e.preventDefault();scores={S:0,C:0,M:0,F:0};
+questions.forEach((q,i)=>scores[document.querySelector('input[name="q'+i+'"]:checked').value]++);
+finalProfile=Object.keys(scores).sort((a,b)=>scores[b]-scores[a])[0];
+const p=profiles[finalProfile];
+document.getElementById("profile").textContent=p.emoji+" "+p.name;
+document.getElementById("description").textContent=p.description;
+document.getElementById("strengths").textContent=p.strengths;
+document.getElementById("challenges").textContent=p.challenges;
+document.getElementById("advice").textContent=p.advice;
+document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.remove("hidden");
+});
+document.getElementById("emailForm").addEventListener("submit",function(e){
+e.preventDefault();
+const p=profiles[finalProfile];
+const report="RH MASTER ESTRATÉGIA - Resultado do teste\nNome: "+document.getElementById("personName").value+"\nPerfil: "+p.name+"\n"+p.description+"\nPontos fortes: "+p.strengths+"\nPontos de atenção: "+p.challenges+"\nDesenvolvimento: "+p.advice;
+document.getElementById("emailMessage").textContent="Seu resultado está preparado. O envio por e-mail será liberado após a configuração do serviço de envio na próxima etapa.";
+});
+renderQuestions();
+</script>
+</body>
+</html>
